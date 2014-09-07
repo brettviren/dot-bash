@@ -6,21 +6,21 @@
 # for git, colors and symbols
 # https://github.com/twolfson/sexy-bash-prompt/blob/master/.bash_prompt
 
-export TERM=xterm-256color
-
 prompt_command () {
     local last_command_exit=$?
 
     local Bold="$(tput bold)"
     local Reset="$(tput sgr0)"
 
-    local Blue="$(tput setaf 27)"
-    local White="$(tput setaf 7)"
-    local Cyan="$(tput setaf 39)"
-    local Green="$(tput setaf 76)"
-    local Yellow="$(tput setaf 154)"
-    local Red="$(tput setaf 9)"
+    local GitColor="$(tput setaf 154)"
+    local PathColor="$(tput setaf 33)"
 
+    local RootColor="$(tput setaf 9)"
+    local UserColor="$(tput setaf 54)"
+
+    local RCColor="$Reset"
+    local SuccColor="$(tput setaf 76)"
+    local FailColor="$(tput setaf 9)"
     local FancyX='\342\234\227'
     local Checkmark='\342\234\223'
 
@@ -29,27 +29,32 @@ prompt_command () {
     PS1="\n"
 
     # last command exit code
-    PS1+="$Bold$White\$? "
+    PS1+="$RCColor\$(printf "%03d" $last_command_exit) "
     if [[ $last_command_exit == 0 ]]; then
-        PS1+="$Green$Checkmark "
+        PS1+="$SuccColor$Checkmark"
     else
-        PS1+="$Red$FancyX "
+        PS1+="$FailColor$FancyX"
     fi
     PS1+="$Reset"
     
-    # Insert git stuff
-    GIT_PS1_DESCRIBE_STYLE=describe
-    PS1+="$Blue$(__git_ps1 '(%s)')$Reset "
-
     # who we are and were we at
     if [[ $EUID == 0 ]]; then
-        PS1+="$Red\h $Blue\w\n$Red\\\$"
+        PS1+=" $RootColor\h $PathColor\w"
     else
-        PS1+="$Green\u@\h $Blue\w\n$White\\\$"
+        PS1+=" $UserColor\u@\h $PathColor\w"
     fi
-    # Print the working directory and prompt marker in blue, and reset
-    # the text color to the default.
-    PS1+="$Reset "
+
+    if git rev-parse > /dev/null 2>&1 ; then
+	# Insert git stuff
+	local branch=$(get_git_branch)
+	local commit=$(get_git_commit)
+	PS1+=" $Reset[$GitColor$branch:$commit$Reset]"
+    fi
+
+    # last bit, start new line, no funky stuff after that to avoid
+    # confusing readline editing
+
+    PS1+="$Reset\n\\\$ "
 
 }
 

@@ -1,4 +1,7 @@
 # -*- shell-script -*-
+
+export TERM=xterm-256color
+
 dot_sourcedir () {
     local dir=$1 ; shift
     if [ ! -d $dir ] ; then
