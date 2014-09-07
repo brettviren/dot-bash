@@ -1,0 +1,4 @@
+My bash setup.
+
+Symlink [[./bash_login]] and [[./bashrc]] to their "dot" equivalents in =$HOME/=.
+
