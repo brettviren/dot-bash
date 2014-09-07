@@ -139,3 +139,4 @@ EOF
 }
 
 export PROMPT_COMMAND='prompt_command'
+
