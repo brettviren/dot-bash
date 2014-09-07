@@ -1,4 +1,11 @@
-My bash setup.
+My bash setup, nothing really fancy here.
 
-Symlink [[./bash_login]] and [[./bashrc]] to their "dot" equivalents in =$HOME/=.
+* Installation
+
+Clone somewhere and symlink [[./bash_login]] and [[./bashrc]] to their "dot" equivalents in =$HOME/=.
+
+* Organization
+
+Put generic functions under [[./functions/]] and variable settings under [[./variables/]].  Any files there ending with =.sh= get loaded.  
+
 

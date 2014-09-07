@@ -16,6 +16,9 @@ color_table () {
 }
 
 # http://www.commandlinefu.com/commands/view/6533/print-all-256-colors-for-testing-term-or-for-a-quick-reference
+color_table_16 () {
+( x=`tput op` y=`printf %$((${COLUMNS}-6))s`;for i in {0..16};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done; )
+}
 color_table_256 () {
 ( x=`tput op` y=`printf %$((${COLUMNS}-6))s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done; )
 }
