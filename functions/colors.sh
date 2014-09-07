@@ -20,5 +20,15 @@ color_table_16 () {
 ( x=`tput op` y=`printf %$((${COLUMNS}-6))s`;for i in {0..16};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done; )
 }
 color_table_256 () {
-( x=`tput op` y=`printf %$((${COLUMNS}-6))s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done; )
+    local x=`tput op` 
+    local y=`printf %$((${COLUMNS}-6))s`
+    for colnum in {0..15} ; do
+	for rownum in {0..15} ; do
+	    color=$(( $colnum * 16 + $rownum))
+	    tput setaf $color
+	    printf '%03d ' $color
+	done
+	echo
+    done
+	#echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done; )
 }
