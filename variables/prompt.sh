@@ -45,12 +45,13 @@ prompt_command () {
     local RootColor="\\[$(tput setaf 9)\\]"
     local UserColor="\\[$(tput setaf 129)\\]"
 
+    local cwd=$(pwd | sed -e 's|'"$HOME"'|~|')
     local hostname="$(hostname)"
-    local ww="${USER}@${hostname}:$(pwd)"
-    local ww_color="${UserColor}${USER}@${hostname}${Reset}:${PathColor}$(pwd)${Reset}"
+    local ww="${USER}@${hostname}:${cwd}"
+    local ww_color="${UserColor}${USER}@${hostname}${Reset}:${PathColor}${cwd}${Reset}"
     if [[ $EUID == 0 ]]; then
-	local ww="ROOT@${hostname}:$(pwd)"
-	local ww_color="${RootColor}ROOT@${hostname}${Reset}:${PathColor}$(pwd)${Reset}"
+	local ww="ROOT@${hostname}:${cwd}"
+	local ww_color="${RootColor}ROOT@${hostname}${Reset}:${PathColor}${cwd}${Reset}"
     fi
 
 
