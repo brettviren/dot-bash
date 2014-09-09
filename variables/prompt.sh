@@ -29,13 +29,14 @@ prompt_command () {
     local RCColor="$Reset"
     local FailColor="\\[$(tput setaf 9)\\]"
     local FailChar='\342\234\227'
-    local OkayColor="\\[$(tput setaf 76)\\]"
+    #local OkayColor="\\[$(tput setaf 76)\\]"
+    local OkayColor="\\[$(tput setaf 240)\\]"
     local OkayChar='\342\234\223'
 
     local rc="$(printf '%03d' $last_command_exit)$FailChar"
     local rc_color="${FailColor}${rc}${Reset}"
     if [[ $last_command_exit == 0 ]]; then
-	rc="$(printf '%03d' $last_command_exit)$OkayChar"
+	rc="$OkayChar"
 	rc_color="${OkayColor}${rc}${Reset}"
     fi
 
@@ -68,14 +69,27 @@ prompt_command () {
     fi
 
     # Insert git stuff if we are in a git dir
-    local GitColor="\\[$(tput setaf 154)\\]"
+    local GitCommitColor="\\[$(tput setaf 154)\\]"
+    local GitBranchColor="$GitColor"
     local gits=""
     local gits_color=""
     if git rev-parse > /dev/null 2>&1 ; then
 	local branch=$(get_git_branch)
+	if [ "$branch" = "develop" ] ; then
+	    GitBranchColor="\\[$(tput setaf 208)\\]" # orange
+	elif [ "$branch" = "master" ] ; then
+	    GitBranchColor="$Bold\\[$(tput setaf 9)\\]" # red, don't edit if following git-flow
+	else 
+	    GitBranchColor="\\[$(tput setaf 128)\\]"
+	fi
+
 	local commit=$(get_git_commit)
+
+	if echo $commit | grep -q 'dirty' ; then
+	    GitCommitColor="$Bold$GitCommitColor"
+	fi
 	gits="[${branch}:${commit}]"
-	gits_color="${GitColor}${gits}${Reset}"
+	gits_color="[${GitBranchColor}${branch}${Reset}:${GitCommitColor}${commit}${Reset}]"
     fi
 
     # timer
