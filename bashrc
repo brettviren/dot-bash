@@ -22,3 +22,6 @@ dot_sourcedir "$DOT_BASH_CONFIG_DIR/functions"
 dot_sourcedir "$DOT_BASH_CONFIG_DIR/variables"
 dot_sourcedir "$DOT_BASH_CONFIG_DIR/apps"
 
+if [ -f /etc/bash_completion ] ; then
+    source /etc/bash_completion
+fi
